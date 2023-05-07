@@ -1,0 +1,57 @@
+﻿@page "/fetchdata"
+
+<PageTitle>Wallets List</PageTitle>
+
+@using WalletsList.Models
+@using WalletsList.Services
+@using WalletsList.Services.Interfeces
+@inject IWalletsService WalletsService
+
+<h1>Wallets List</h1>
+
+@if (wallets == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Address</th>
+                <th>Balance</th>
+                <th>Updated Data</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var wallet in wallets)
+            {                
+                <tr>
+                    <td>@wallet.Id</td>
+                    <td>@wallet.Address</td>
+                    @if (wallet.Balance != null)
+                    {
+                        <td>@wallet.Balance</td>
+                    }
+                    else
+                    {
+                        <td>Failed to get balance</td>
+                    }                                          
+                    <td>@wallet.Updated_At</td>
+                </tr>
+
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private IEnumerable<Wallet>? wallets;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await WalletsService.GetAsync("Wallets");
+        wallets = result.OrderByDescending(x => x.Balance);
+    }
+}
