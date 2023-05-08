@@ -1,0 +1,41 @@
+﻿@page "/"
+@page "/WalletsDataGrid"
+
+<PageTitle>Wallets List</PageTitle>
+
+@using WalletsList.Models
+@using WalletsList.Services
+@using WalletsList.Services.Interfeces
+@inject IWalletsService walletsService
+
+<h1>Wallets List</h1>
+
+@if (_wallets == null)
+{
+    <p><em>Loading...</em></p>
+}
+else if (_wallets.Count() == 0)
+{
+    <p><em>Something went wrong, data to display was not received, please try again later</em></p>
+}
+else
+{
+    <RadzenGrid AllowPaging="true" AllowSorting="true" PageSize="100" Data="@_wallets" TItem="Wallet">
+        <Columns>
+            <RadzenGridColumn TItem="Wallet" Property="Id" Title="Wallet ID"></RadzenGridColumn>
+            <RadzenGridColumn TItem="Wallet" Property="Address" Title="Adress"></RadzenGridColumn>
+            <RadzenGridColumn TItem="Wallet" Property="Balance" Title="Balance"></RadzenGridColumn>
+            <RadzenGridColumn TItem="Wallet" Property="Updated_At" Title="Updated At"></RadzenGridColumn>
+        </Columns>
+    </RadzenGrid>
+}
+
+@code {
+    private IEnumerable<Wallet>? _wallets;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var result = await walletsService.GetAsync("Wallets");
+        _wallets = result.OrderByDescending(x => x.Balance);       
+    }
+}

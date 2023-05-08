@@ -1,6 +1,3 @@
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
-using WalletsList.Data;
 using WalletsList.Services;
 using WalletsList.Services.Interfeces;
 
@@ -10,9 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddScoped<IWalletsService, WalletsService>();
-builder.Services.AddSingleton<WeatherForecastService>();
 var LocalApi = builder.Configuration.GetValue<string>("ApiUrl:LocalApi");
-var AzureApi = builder.Configuration.GetValue<string>("ApiUrl:AzureApi");
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(LocalApi) });
 
 var app = builder.Build();
