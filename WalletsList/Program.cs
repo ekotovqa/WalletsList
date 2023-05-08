@@ -1,14 +1,16 @@
+using WalletsList;
 using WalletsList.Services;
 using WalletsList.Services.Interfeces;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddOptions<AppSettings>();
+builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddScoped<IWalletsService, WalletsService>();
-var LocalApi = builder.Configuration.GetValue<string>("ApiUrl:LocalApi");
-builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(LocalApi) });
+builder.Services.AddScoped<HttpClient>();
 
 var app = builder.Build();
 

@@ -25,6 +25,16 @@ else
             <RadzenGridColumn TItem="Wallet" Property="Id" Title="Wallet ID"></RadzenGridColumn>
             <RadzenGridColumn TItem="Wallet" Property="Address" Title="Adress"></RadzenGridColumn>
             <RadzenGridColumn TItem="Wallet" Property="Balance" Title="Balance">
+                <Template Context="wallet">
+                    <RadzeText>
+                        @{
+                            if (wallet.Balance != null)
+                                @wallet.Balance
+                            else
+                                @_message
+                        }
+                    </RadzeText>
+                </Template>
             </RadzenGridColumn>
             <RadzenGridColumn TItem="Wallet" Property="UpdatedAt" Title="Updated At"></RadzenGridColumn>
         </Columns>
@@ -34,7 +44,7 @@ else
 
 @code {
     private IEnumerable<Wallet>? _wallets;
-
+    private string _message = "Error getting data, please try again later";
     protected override async Task OnInitializedAsync()
     {
         var result = await walletsService.GetAsync("Wallets");

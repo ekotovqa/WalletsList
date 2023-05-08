@@ -1,7 +1,4 @@
-﻿
-using System.Text.Json.Serialization;
-
-namespace WalletsList.Models
+﻿namespace WalletsList.Models
 {
     public class Wallet
     {
