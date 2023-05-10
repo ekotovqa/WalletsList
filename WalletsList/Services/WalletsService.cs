@@ -14,12 +14,21 @@ namespace WalletsList.Services
 
         public async Task<IEnumerable<Wallet>> GetAsync(string endPoint)
         {
-            var response = await _httpClient.GetAsync(endPoint);
-            if (response.IsSuccessStatusCode)
+            try
             {
-                return await response.Content.ReadFromJsonAsync<IEnumerable<Wallet>>();
+                var response = await _httpClient.GetAsync(endPoint);
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadFromJsonAsync<IEnumerable<Wallet>>();
+                }
+                return Enumerable.Empty<Wallet>();
             }
-            return Enumerable.Empty<Wallet>();
+            catch (Exception)
+            {
+                return Enumerable.Empty<Wallet>();
+                throw;
+            }
+            
         }
     }
 }
